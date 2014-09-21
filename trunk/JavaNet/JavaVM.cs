@@ -43,6 +43,11 @@ namespace JavaNet
 			Directory.CreateDirectory ("javanet/classes");
 			Directory.CreateDirectory ("javanet/jars");
 
+            if (System.Environment.OSVersion.Platform == PlatformID.Unix || System.Environment.OSVersion.Platform == PlatformID.MacOSX)
+                psep = ":";
+            else
+                psep = ";";
+
 			var ecjstream = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("JavaNet.ecj-4.5M2.jar");
 			var ecjfilestream = new FileStream ("javanet/ecj.jar", FileMode.Create, FileAccess.Write);
 			ecjstream.CopyTo (ecjfilestream);
@@ -98,6 +103,7 @@ namespace JavaNet
 		}
 		public void BuildStub(string assemblyPath)
 		{
+            IKVM.Reflection.Type.DefaultBinder.GetHashCode();
 			IKVM.IKVMStub.Build (assemblyPath, "javanet/jars/" + Path.GetFileName(assemblyPath) + ".jar", true, libs, refs);
 		}
 		public void BuildJavaFile (string path, string outPath = "javanet/classes")

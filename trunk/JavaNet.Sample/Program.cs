@@ -98,6 +98,10 @@ namespace JavaNet.Sample
 			// Call methods from C#
 			helloWorldJava.Hello ();
 			Console.WriteLine("C# helloWorldJava.GetWorld(): " + helloWorldJava.GetWorld());
+
+
+            // Wait for user
+            Console.ReadKey();
 		}
 	}
 }
