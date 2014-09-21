@@ -52,7 +52,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ecj-4.5M2.jar" />
-  </ItemGroup>
 </Project>
