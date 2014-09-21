@@ -3,6 +3,25 @@ using JavaNet;
 
 namespace JavaNet.Sample
 {
+	public interface IHelloWorld
+	{
+		void Hello();
+		string GetWorld();
+	}
+
+	public class HelloWorld : IHelloWorld
+	{
+		public void Hello()
+		{
+			Console.WriteLine ("Hello from .Net!");
+		}
+
+		public string GetWorld()
+		{
+			return ".NetWorld";
+		}
+	}
+
 	class MainClass
 	{
 		public static void Main (string[] args)
@@ -10,8 +29,9 @@ namespace JavaNet.Sample
 			// Initialize the VM
 			var VM = JavaVM.Create (null, true, null);
 
-			// Build Sample.java file with bundled ECJ compiler
+			// Build sample java files with bundled ECJ compiler
 			VM.BuildJavaFile ("Sample.java");
+			VM.BuildJavaFile ("HelloWorld_impl.java");
 
 			// Load the class
 			var sample = VM.GetClass ("Sample");
@@ -36,6 +56,25 @@ namespace JavaNet.Sample
 				"some array of",
 				"arguments"
 			});
+
+
+			// Okay, now test interfaces
+			var helloWorldJavaField = instance.GetField ("helloWorld");
+
+			// Create the .Net instance and push it to java
+			IHelloWorld helloWorld = new HelloWorld ();
+			helloWorldJavaField.Set (helloWorld);
+
+			// Call the testHelloWorld method
+			instance.GetMethod ("testHelloWorld").Call ();
+
+			// Create the java side IHelloWorld implementation
+			var helloWorldJavaObject = VM.GetClass ("HelloWorld_impl").New ();
+			var helloWorldJava = helloWorldJavaObject.GetInterface<IHelloWorld> ();
+
+			// Call methods from C#
+			helloWorldJava.Hello ();
+			Console.WriteLine("C# helloWorldJava.GetWorld(): " + helloWorldJava.GetWorld());
 		}
 	}
 }

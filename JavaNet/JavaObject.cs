@@ -11,6 +11,7 @@ namespace JavaNet
 	{
 		IJavaMethod GetMethod(string name, params object[] parameterTypes);
 		IJavaField GetField(string name);
+		T GetInterface<T>();
 	}
 	internal class JavaObject : IJavaObject
 	{
@@ -50,6 +51,15 @@ namespace JavaNet
 		public IJavaField GetField(string name)
 		{
 			return new JavaField (name, clazz, obj);
+		}
+
+		public T GetInterface<T>()
+		{
+			foreach (System.Type t in obj.GetType().GetInterfaces()) {
+				if (typeof(T) == t)
+					return (T)obj;
+			}
+			return default(T);
 		}
 
 		public override int GetHashCode ()
